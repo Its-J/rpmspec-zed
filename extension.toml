@@ -1,5 +1,5 @@
 id = "rpmspec"
-name = "RPM Spec"
+name = "Terra RPM Spec"
 version = "0.0.1"
 schema_version = 1
 authors = ["Its-J <jonah@fyralabs.com>"]
@@ -8,4 +8,5 @@ repository = "https://github.com/Its-J/rpmspec-zed"
 
 [grammars.rpmspec]
 repository = "https://gitlab.com/cryptomilk/tree-sitter-rpmspec"
-rev = "<commit sha from step 1>"
+rev = "7d1557162655f677729dca90cc180aca657053ec"
+path = "rpmspec"
