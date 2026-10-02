@@ -1,12 +1,12 @@
-id = "rpmspec"
+id = "terra_rpmspec"
 name = "Terra RPM Spec"
 version = "0.0.1"
 schema_version = 1
 authors = ["Its-J <jonah@fyralabs.com>"]
-description = "RPM spec file support"
+description = "RPM spec file support for Terra"
 repository = "https://github.com/Its-J/rpmspec-zed"
 
 [grammars.rpmspec]
 repository = "https://gitlab.com/cryptomilk/tree-sitter-rpmspec"
-rev = "7d1557162655f677729dca90cc180aca657053ec"
+commit = "7d1557162655f677729dca90cc180aca657053ec"
 path = "rpmspec"
