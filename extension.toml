@@ -1,0 +1,11 @@
+id = "rpmspec"
+name = "RPM Spec"
+version = "0.0.1"
+schema_version = 1
+authors = ["Its-J <jonah@fyralabs.com>"]
+description = "RPM spec file support"
+repository = "https://github.com/Its-J/rpmspec-zed"
+
+[grammars.rpmspec]
+repository = "https://gitlab.com/cryptomilk/tree-sitter-rpmspec"
+rev = "<commit sha from step 1>"
