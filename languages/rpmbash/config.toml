@@ -1,0 +1,4 @@
+name = "rpmbash"
+grammar = "rpmbash"
+hidden = true
+line_comments = ["# "]

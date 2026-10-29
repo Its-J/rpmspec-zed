@@ -1,4 +1,4 @@
-name = "Terra RPM Spec"
+name = "RPM Spec"
 grammar = "rpmspec"
 path_suffixes = ["spec"]
 line_comments = ["# "]
