@@ -69,6 +69,10 @@
 %endif
 
 # comment
+%dnl line comment with a macro %{name} in it
+%global dnl_colon a%{dnl:inline comment %{_bindir}}b
+%global dnl_space a%{dnl inline comment %{_bindir}}b
+%global dnl_empty a%{dnl}b
 %if %{?debug_package:1}%{!?debug_package:0}
 %global debug_package %{nil}
 %endif
@@ -107,6 +111,7 @@ BuildSystem:    cmake
 BuildOption:    -DFOO=ON
 BuildOption(conf): -DBAR=OFF
 BuildOption(build): -j4
+BuildOption(install): prefix=%{_prefix}
 DocDir:         %{_docdir}
 Prefix:         /usr
 Prefixes:       /usr /etc
@@ -126,6 +131,7 @@ Patch:          unnumbered.patch
 NoPatch:        100
 
 BuildRequires:  gcc, gcc-c++, git-core
+buildrequires:  make
 BuildRequires:  cmake >= 3.20
 BuildRequires:  meson > 1.0
 BuildRequires:  ninja-build = 1.11.1
@@ -174,12 +180,15 @@ Requires(verify):      coreutils
 BuildPrereq:    autoconf
 Prereq:         coreutils
 OrderWithRequires(post): firewalld
+OrderWithRequires: firewalld
 
 Provides:       %{name}-compat = %{version}-%{release}
 Provides:       bundled(crate(serde)) = 1.0.200
+  Provides:     indented-since-4-20
 Obsoletes:      old-highlight-test < 1.0
 Conflicts:      highlight-test-legacy
 Recommends:     bash-completion
+Recommends(meta): bash-completion-extras
 Suggests:       zed
 Enhances:       zed
 Supplements:    (%{name} and langpacks-en)
@@ -265,6 +274,8 @@ export CFLAGS="%{optflags} -fno-strict-aliasing"
 %cargo_build -f feature-a,feature-b
 %{__python3} setup.py build
 make %{?_smp_mflags} V=1 CC="%{__cc}"
+%dnl make %{?_smp_mflags} check
+make %{dnl:-j1} install-docs
 
 for f in docs/*.md; do
     pandoc -s "$f" -o "${f%%.md}.html"
@@ -280,6 +291,7 @@ echo "appended build step" >> build.log
 %install
 %make_install DESTDIR=%{buildroot}
 %pyproject_install
+%pyproject_save_files -l highlight_test
 install -Dpm 0755 build/%{name} %{buildroot}%{_bindir}/%{name}
 install -Dpm 0644 %{SOURCE1} %{buildroot}%{_datadir}/applications/%{name}.desktop
 mkdir -p %{buildroot}%{_sysconfdir}/%{name}
@@ -390,7 +402,7 @@ print("libs going away")
 %transfiletriggerpostun -- %{_datadir}/glib-2.0/schemas
 glib-compile-schemas %{_datadir}/glib-2.0/schemas &>/dev/null || :
 
-%files -f %{name}.lang
+%files -f %{name}.lang -f %{pyproject_files}
 %license LICENSE
 %doc README.md CHANGELOG.md
 %{_bindir}/%{name}

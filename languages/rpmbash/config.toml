@@ -1,4 +1,4 @@
 name = "rpmbash"
 grammar = "rpmbash"
 hidden = true
-line_comments = ["# "]
+line_comments = ["%dnl ", "%{dnl} ", "# "]

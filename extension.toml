@@ -1,4 +1,4 @@
-id = "rpmspec"
+id = "terra_rpmspec"  # change id to rpmspec before contributing to zed registry
 name = "RPM Spec"
 version = "0.0.1"
 schema_version = 1
