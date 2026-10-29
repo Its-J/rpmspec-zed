@@ -24,6 +24,11 @@ must install perl and lua extentions for their highlighting injection to work
   - `ExclusiveArch:`
   - `BuildArch:`
   - `Provides:       %{name}-compat = %{version}-%{release}` normal `Provides:` works but the provides in this one doesnt
+- some valid tags arent in the grammar at all (grammar issue)
+  - `DistURL:`, `Icon:`, `TranslationUrl:`, `UpstreamReleases:`
+  - `Requires(preuntrans):`, `Requires(postuntrans):`, the qualifier list stops at `posttrans`
+  - one of these on its own is a local error, but a few together can turn the whole file into one big error
+  - left them out of `tests/highlight-test.spec` so the rest of it still highlights
 - `%sourcelist`/`%patchlist` after the subpackages gets eaten by the last `%description`
   - works if its put up with the `Source`/`Patch` tags
 - `#` comments right after a `-p <lua>` scriptlet get highlighted as lua code
