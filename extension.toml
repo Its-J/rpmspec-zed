@@ -10,11 +10,11 @@ repository = "https://github.com/Its-J/rpmspec-zed"
 # fork with grammar fixes (main branch), upstream is
 # https://gitlab.com/cryptomilk/tree-sitter-rpmspec at 7d1557162655f677729dca90cc180aca657053ec
 repository = "https://gitlab.com/J-GitHubAcc/tree-sitter-rpmspec"
-commit = "9ef056efa54d60686218e18841ed977ffc22fd42"
+commit = "f5b07524489086e65243b9e90b34507fdf31fb21"
 path = "rpmspec"
 
 [grammars.rpmbash]
 # same fork and commit, rpmbash itself is unchanged from upstream
 repository = "https://gitlab.com/J-GitHubAcc/tree-sitter-rpmspec"
-commit = "9ef056efa54d60686218e18841ed977ffc22fd42"
+commit = "f5b07524489086e65243b9e90b34507fdf31fb21"
 path = "rpmbash"

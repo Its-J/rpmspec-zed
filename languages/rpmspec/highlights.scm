@@ -433,3 +433,39 @@
 (macro_simple_expansion
   "%" @punctuation.special
   (macro_option))
+
+; Inline %{dnl ...} comments: RPM drops everything inside, so grey all of it.
+; These come last so they win over the macro colors above
+((builtin) @comment
+  (#eq? @comment "dnl"))
+
+((macro_expansion
+  "%{" @comment
+  (builtin) @_dnl)
+  (#eq? @_dnl "dnl"))
+
+((macro_expansion
+  (builtin) @_dnl
+  _ @comment)
+  (#eq? @_dnl "dnl"))
+
+((macro_expansion
+  (builtin) @_dnl
+  (_
+    _ @comment))
+  (#eq? @_dnl "dnl"))
+
+((macro_expansion
+  (builtin) @_dnl
+  (_
+    (_
+      _ @comment)))
+  (#eq? @_dnl "dnl"))
+
+; Escaped %% (a literal %): greyed out together with the name it escapes,
+; %%s or %%{name} (needs the grammar fork for the escaped name)
+(macro_simple_expansion
+  (escaped_percent)) @comment
+
+; The modifier in %define name<l> / name<o> (rpm >= 6.1)
+(macro_modifier) @attribute

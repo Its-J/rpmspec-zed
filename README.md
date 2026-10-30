@@ -35,19 +35,10 @@ Extension that improves RedHat Package Manager .spec file support in Zed
 - only keep one copy installed, uninstall old dev installs if the id changed
 
 # Known Issues
-- [ ] `%%{macro}` should get greyed out like a comment? maybe not idk
 - [ ] `#` comments right after a `-p <lua>` scriptlet get highlighted as lua
-  - the comment is part of the lua script until the next section, and `#` isnt a lua comment
-  - rpm runs it as lua too, so use `--` comments in lua scriptlets
-- [ ] inline `%{dnl ...}` doesnt get highlighted as a comment
-- [ ] `%autochangelog` followed by normal changelog entries breaks
-- [ ] `%if_enabled foo` ... `%endif` breaks
-  - alt linux macro that expands to an `%if`, the grammar cant know that
-- [ ] `%define -e`, `-g` and `-eg` dont parse
-- [ ] `%define foo<l>` / `foo<o>` modifiers parse as plain words
-- [ ] `%dump` and `%trace` without braces break the parse
-- [ ] globs like `rm -f *.la` in scriptlets arent highlighted, tree-sitter-bash has nothing to color
-- [ ] `%description -n python3-%{name}` shows as `python3-` in the outline
+  - not a highlighting bug, the comment is part of the lua script until the next section and rpmbuild fails on it (`unexpected symbol near '#'`)
+  - use `--` comments in lua scriptlets
+- [ ] globs in scriptlets like `rm -f *.la` color the whole word, not just the `*`, tree-sitter-bash has no glob node
 - [ ] change the extension id to rpmspec before contributing to zed registry
 
 # Credits

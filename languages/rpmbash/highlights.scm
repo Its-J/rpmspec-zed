@@ -176,3 +176,8 @@
     "{"
     "}"
   ] @punctuation.bracket)
+
+; Glob patterns: *.la, docs/*.md (tree-sitter-bash has no glob node, so the
+; whole word gets the color)
+((word) @string.regex
+  (#match? @string.regex "[*?]"))
