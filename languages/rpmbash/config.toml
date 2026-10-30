@@ -2,3 +2,13 @@ name = "rpmbash"
 grammar = "rpmbash"
 hidden = true
 line_comments = ["%dnl ", "%{dnl} ", "# "]
+word_characters = ["%", "{", "}", "?", "!"]
+completion_query_characters = ["%", "{", "_"]
+autoclose_before = ";:.,=}])> \t\n"
+brackets = [
+    { start = "{", end = "}", close = true, newline = true },
+    { start = "(", end = ")", close = true, newline = true },
+    { start = "[", end = "]", close = true, newline = false },
+    { start = "\"", end = "\"", close = true, newline = false },
+    { start = "'", end = "'", close = true, newline = false },
+]

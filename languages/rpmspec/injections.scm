@@ -170,9 +170,11 @@
 ; LUA MACRO EXPANSION %{lua:...}
 ; ============================================================
 
+; LOCAL CHANGE: no argument: field, with it only the first script_code piece
+; matched, so an unclosed lua string ran to the next lua injection in the file
 (macro_expansion
   (builtin) @_builtin
-  argument: (script_code) @injection.content
+  (script_code) @injection.content
   (#eq? @_builtin "lua:")
   (#set! injection.language "lua")
   (#set! injection.include-children)

@@ -41,7 +41,7 @@
 
 ; ELF dependencies: libc.so.6(GLIBC_2.2.5)(64bit)
 (elf_dependency
-  soname: (soname) @module
+  soname: (soname) @namespace @module
   symbol_version: (elf_symbol_version) @property
   arch: (elf_arch) @attribute)
 
@@ -49,10 +49,10 @@
 (path_dependency) @string.special.path
 
 ; Qualified dependencies: perl(Carp), pkgconfig(glib-2.0)
+; LOCAL CHANGE: qualifier content (glib-2.0 in pkgconfig(glib-2.0)) is left
+; uncolored, upstream tagged it @variable.parameter
 (qualified_dependency
-  name: (_) @function
-  qualifier: (dependency_qualifier
-    content: (_) @variable.parameter))
+  name: (_) @function)
 
 ; ISA qualifiers override - known architecture patterns
 ((dependency_qualifier
@@ -62,9 +62,9 @@
 ; Simple dependencies: make, cmake-filesystem >= 3
 ; Note: qualified_dependency also has name field
 (qualified_dependency
-  name: (_) @module)
+  name: (_) @namespace @module)
 (dependency
-  (word) @module)
+  (word) @namespace @module)
 
 ; Source tag file paths
 (preamble_tag
@@ -72,19 +72,19 @@
 
 ; Description and package sections
 (description
-  "%description" @type.definition)
+  "%description" @keyword)
 (package
-  "%package" @type.definition)
+  "%package" @keyword)
 
 ; Sourcelist section
 (sourcelist
-  "%sourcelist" @type.definition)
+  "%sourcelist" @keyword)
 (sourcelist
   (file) @string.special.path)
 
 ; Patchlist section
 (patchlist
-  "%patchlist" @type.definition)
+  "%patchlist" @keyword)
 (patchlist
   (file) @string.special.path)
 
@@ -94,19 +94,19 @@
 
 ; Build scriptlets (%prep, %build, %install, %check, %clean)
 (prep_scriptlet
-  (section_prep) @module.builtin)
+  (section_prep) @keyword)
 (generate_buildrequires
-  (section_generate_buildrequires) @module.builtin)
+  (section_generate_buildrequires) @keyword)
 (conf_scriptlet
-  (section_conf) @module.builtin)
+  (section_conf) @keyword)
 (build_scriptlet
-  (section_build) @module.builtin)
+  (section_build) @keyword)
 (install_scriptlet
-  (section_install) @module.builtin)
+  (section_install) @keyword)
 (check_scriptlet
-  (section_check) @module.builtin)
+  (section_check) @keyword)
 (clean_scriptlet
-  (section_clean) @module.builtin)
+  (section_clean) @keyword)
 
 ; Runtime scriptlets (%pre, %post, %preun, %postun, etc.)
 [
@@ -119,7 +119,7 @@
   "%preuntrans"
   "%postuntrans"
   "%verify"
-] @module.builtin
+] @keyword
 
 ; Scriptlet interpreter (-p <program>)
 (script_interpreter
@@ -135,7 +135,7 @@
   "%triggerin"
   "%triggerun"
   "%triggerpostun"
-] @module.builtin
+] @keyword
 
 ; File trigger scriptlets
 [
@@ -145,7 +145,7 @@
   "%transfiletriggerin"
   "%transfiletriggerun"
   "%transfiletriggerpostun"
-] @module.builtin
+] @keyword
 
 ; -----------------------------------------------------------------------------
 ; Prep macros (%setup, %autosetup, %patch, %autopatch)
@@ -170,7 +170,7 @@
 ; =============================================================================
 
 (files
-  "%files" @type.definition)
+  "%files" @keyword)
 
 ; File directives
 [
@@ -194,7 +194,7 @@
 ; =============================================================================
 
 (changelog
-  "%changelog" @type.definition)
+  "%changelog" @keyword)
 
 ; =============================================================================
 ; MACROS
@@ -343,3 +343,93 @@
   "or"
   "||"
 ] @operator
+
+; =============================================================================
+; LOCAL ADDITIONS (not in upstream tree-sitter-rpmspec)
+; =============================================================================
+
+; %{with foo} / %{defined foo} inside %if parse as operators, not macro_expansion
+(with_operator
+  "%{" @punctuation.special
+  (identifier) @constant.macro
+  "}" @punctuation.special)
+
+(defined_operator
+  "%{" @punctuation.special
+  (identifier) @constant.macro
+  "}" @punctuation.special)
+
+; Arch/OS tag values: BuildArch: noarch, ExclusiveArch: x86_64 aarch64
+((preamble_tag
+  (dependency_tag) @_tag
+  value: (word) @attribute)
+  (#match? @_tag "(?i)^(BuildArch|BuildArchitectures|ExcludeArch|ExclusiveArch|ExcludeOS|ExclusiveOS):$"))
+
+((preamble_tag
+  (dependency_tag) @_tag
+  value: (concatenation
+    (word) @attribute))
+  (#match? @_tag "(?i)^(BuildArch|BuildArchitectures|ExcludeArch|ExclusiveArch|ExcludeOS|ExclusiveOS):$"))
+
+; Versioned dependency names: Provides: %{name}-compat = %{version}-%{release}
+; (the name: field doesn't match the word here, so it's left off)
+(version_dependency
+  (word) @namespace @module)
+
+; SPDX license expressions: MIT AND (Apache-2.0 OR BSD-3-Clause)
+((word) @keyword.operator
+  (#match? @keyword.operator "^(AND|OR|WITH)$"))
+
+(parenthesized_expression
+  [
+    "("
+    ")"
+  ] @punctuation.bracket)
+
+; Emails in Packager: and changelog headers: <john at example.com>
+; The brackets are colored like macro punctuation, the address stays plain
+; (needs the grammar fork, upstream has no email node)
+(email
+  "<" @punctuation.special
+  ">" @punctuation.special)
+
+; VCS values: VCS: git:https://github.com/... (the grammar parses them as words)
+((preamble_tag
+  (tag) @_tag
+  value: (word) @string.special.url)
+  (#match? @_tag "(?i)^vcs:$"))
+
+; The % of the prep macros (%setup, %autosetup, %patch, %autopatch), upstream
+; only colors their name and options
+(setup_macro
+  "%" @punctuation.special)
+
+(autosetup_macro
+  "%" @punctuation.special)
+
+(patch_macro
+  "%" @punctuation.special)
+
+(autopatch_macro
+  "%" @punctuation.special)
+
+; Changelog entry headers: * Wed Oct 28 2026 Name <email> - 2:1.0-1
+; (needs the grammar fork, upstream keeps the whole header as one string)
+(changelog_entry
+  "*" @punctuation.special)
+
+(changelog_date) @constant
+
+; The "-" before the version is colored like the version
+(changelog_header
+  "-" @number)
+
+(changelog_version) @number
+
+; Glob wildcards in %files paths: *, ?, [abc] (needs the grammar fork)
+(glob) @string.regex
+
+; The % of brace-less option references in parametric macros: %-f, %-f*
+(macro_simple_expansion
+  "%" @punctuation.special
+  (macro_option))

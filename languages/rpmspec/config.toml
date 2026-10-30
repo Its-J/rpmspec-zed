@@ -1,4 +1,15 @@
 name = "RPM Spec"
 grammar = "rpmspec"
 path_suffixes = ["spec"]
+modeline_aliases = ["spec", "rpmspec", "rpm-spec"]
 line_comments = ["%dnl ", "%{dnl} ", "# "]
+word_characters = ["%", "{", "}", "?", "!"]
+completion_query_characters = ["%", "{", "_"]
+unordered_list = ["- "]
+autoclose_before = ";:.,=}])> \t\n"
+brackets = [
+    { start = "{", end = "}", close = true, newline = true },
+    { start = "(", end = ")", close = true, newline = true },
+    { start = "[", end = "]", close = true, newline = false },
+    { start = "\"", end = "\"", close = true, newline = false },
+]
