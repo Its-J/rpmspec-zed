@@ -364,6 +364,13 @@ export CFLAGS="%{optflags} -fno-strict-aliasing"
 make %{?_smp_mflags} V=1 CC="%{__cc}"
 %dnl make %{?_smp_mflags} check
 make %{dnl:-j1} install-docs
+%define -e expanded_define %{major}.%{minor}
+%define -g global_define value
+%define -eg eg_define value
+%dump
+%trace
+%trace
+echo "after the broken macro lines"
 
 for f in docs/*.md; do
     pandoc -s "$f" -o "${f%%.md}.html"
@@ -384,6 +391,7 @@ install -Dpm 0755 build/%{name} %{buildroot}%{_bindir}/%{name}
 install -Dpm 0644 %{SOURCE1} %{buildroot}%{_datadir}/applications/%{name}.desktop
 mkdir -p %{buildroot}%{_sysconfdir}/%{name}
 ln -sf %{_bindir}/%{name} %{buildroot}%{_bindir}/ht
+rm -f %{buildroot}%{_libdir}/*.la %{buildroot}%{_libdir}/*.{a,la}
 %find_lang %{name}
 %{!?_licensedir:%global license %%doc}
 
@@ -438,6 +446,7 @@ local st = posix.stat(path)
 if st and st.type == "link" then
     os.remove(path)
 end
+# comment after a lua scriptlet
 
 %post -n python3-%{name} -p /usr/bin/python3
 import sys
@@ -523,7 +532,11 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &>/dev/null || :
 %{_libdir}/pkgconfig/%{name}.pc
 
 %files doc
-%doc docs/*.htmlrpmba
+%doc docs/*.html
+
+%if_enabled docs
+%{_datadir}/%{name}/if-enabled-docs/
+%endif
 
 %changelog
 * Thu Oct 29 2026 Its-J <jonah@fyralabs.com> - 2:1.27.0-1
@@ -567,3 +580,5 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &>/dev/null || :
 
 * Mon Sep 28 2026 Fedora Release Engineering <releng@fedoraproject.org> - 1.17.0^20260928git1234abc-2
 - Multi word name, caret post-release snapshot version
+
+%autochangelog
