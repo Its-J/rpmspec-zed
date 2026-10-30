@@ -7,13 +7,14 @@ description = "RedHat Package Manager .spec file support"
 repository = "https://github.com/Its-J/rpmspec-zed"
 
 [grammars.rpmspec]
-# local fork with preamble tag fixes (main branch), upstream is
+# fork with grammar fixes (main branch), upstream is
 # https://gitlab.com/cryptomilk/tree-sitter-rpmspec at 7d1557162655f677729dca90cc180aca657053ec
-repository = "file:///home/j/Repos/tree-sitter-rpmspec"
+repository = "https://gitlab.com/J-GitHubAcc/tree-sitter-rpmspec"
 commit = "9ef056efa54d60686218e18841ed977ffc22fd42"
 path = "rpmspec"
 
 [grammars.rpmbash]
-repository = "https://gitlab.com/cryptomilk/tree-sitter-rpmspec"
-commit = "7d1557162655f677729dca90cc180aca657053ec"
+# same fork and commit, rpmbash itself is unchanged from upstream
+repository = "https://gitlab.com/J-GitHubAcc/tree-sitter-rpmspec"
+commit = "9ef056efa54d60686218e18841ed977ffc22fd42"
 path = "rpmbash"
