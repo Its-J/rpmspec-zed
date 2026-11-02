@@ -462,10 +462,5 @@
       _ @comment)))
   (#eq? @_dnl "dnl"))
 
-; Escaped %% (a literal %): greyed out together with the name it escapes,
-; %%s or %%{name} (needs the grammar fork for the escaped name)
-(macro_simple_expansion
-  (escaped_percent)) @comment
-
 ; The modifier in %define name<l> / name<o> (rpm >= 6.1)
 (macro_modifier) @attribute

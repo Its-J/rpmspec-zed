@@ -446,7 +446,7 @@ local st = posix.stat(path)
 if st and st.type == "link" then
     os.remove(path)
 end
-# comment after a lua scriptlet
+-- comment in a lua scriptlet
 
 %post -n python3-%{name} -p /usr/bin/python3
 import sys
