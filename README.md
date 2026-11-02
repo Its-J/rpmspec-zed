@@ -28,10 +28,6 @@ Extension that improves RedHat Package Manager .spec file support in Zed
 2. put that folder in zeds installed extensions folder `~/.local/share/zed/extensions/installed/`
 3. restart zed
 
-## Notes
-- the id is `terra_rpmspec` because the zed registry already has an `rpmspec` extension
-- only keep one copy installed, uninstall old dev installs if the id changed
-
 # Known Issues
 - [ ] globs in scriptlets like `rm -f *.la` color the whole word, not just the `*`, tree-sitter-bash has no glob node
 - [ ] change the extension id to rpmspec before contributing to zed registry
